@@ -1,178 +1,384 @@
-# Praktikum 11: PHP OOP Lanjutan - Modular Framework & Routing
+# Praktikum 11 – Modularisasi dengan PHP OOP & Routing
 
-## Tujuan Praktikum
-- Memahami konsep dasar Framework Modular
-- Memahami konsep dasar routing pada PHP
-- Mampu membuat Framework sederhana menggunakan PHP OOP
+## Nama : Cindy Revalina Simanullang
 
-## Struktur Project
-```
-lab11_php_oop/ 
-├── .htaccess           (Konfigurasi URL Rewrite) 
-├── config.php          (Konfigurasi Database) 
-├── index.php           (Gerbang Utama / Routing) 
-├── class/              (Tempat menyimpan Library) 
-│   ├── Database.php 
-│   └── Form.php 
-├── module/             (Tempat modul-modul website) 
-│   └── artikel/ 
-│       ├── index.php   (Menampilkan data) 
-│       ├── tambah.php  (Form tambah) 
-│       └── ubah.php 
-├── template/           (Bagian layout) 
-├── header.php 
-├── footer.php 
-└── sidebar.php         
-```
+## NIM  : 312410417
 
-## Langkah Implementasi
+Repository ini berisi hasil praktikum 11 mata kuliah Pemrograman Web Universitas Pelita Bangsa.
 
-### 1. Konfigurasi Database (`config.php`)
-```
-$config = [
-    'host' => 'localhost',
-    'username' => 'root',
-    'password' => '',
-    'db_name' => 'lathian_oop'
-];
-```
+## TUJUAN ARTIKEL: "Pengenalan PHP dan Perannya dalam Pengembangan Web Modern"
 
-### 2. Buat Router (`index.php`)
-```
-<?php
-include "config.php";
-include "class/Database.php";
-include "class/Form.php";
+    1. Memberikan pemahaman tentang apa itu PHP.
+       - PHP adalah bahasa pemrograman server-side untuk membuat website dinamis.
 
-session_start();
+    2. Menjelaskan alasan mengapa PHP banyak digunakan.
+       - Mudah dipelajari, fleksibel, dan cocok untuk pemula maupun profesional.
+       - Terintegrasi baik dengan database seperti MySQL.
 
-$path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/artikel/index';
-$segments = explode('/', trim($path, '/'));
+    3. Menunjukkan peran PHP dalam pengembangan aplikasi web.
+       - Mengolah data, menerima input, mengelola sesi, dan berkomunikasi dengan database.
 
-$mod = isset($segments[0]) ? $segments[0] : 'home';
-$page = isset($segments[1]) ? $segments[1] : 'index';
+    4. Memberikan gambaran perkembangan PHP di era modern.
+       - Tersedia banyak framework seperti Laravel, CI, dan Symfony.
+       - Membantu developer membuat aplikasi yang lebih aman dan terstruktur.
 
-$file = "module/{$mod}/{$page}.php";
+    5. Menjelaskan manfaat mempelajari PHP bagi mahasiswa atau developer.
+       - Dapat membuat sistem CRUD, login, dashboard, dan aplikasi besar lainnya.
+       - PHP tetap relevan dan digunakan luas di dunia industri.
 
-include "template/header.php";
+## Struktur Projec
 
-if (file_exists($file)) {
-    include $file;
-} else {
-    echo '<div class="alert alert-danger">Modul tidak ditemukan: ' . $mod . '/' . $page . '</div>';
-}
+    lab11_php_oop/
+    ├── database.php
+    ├── form.php
+    ├── gambar/
+    │   ├── home1.png
+    │   ├── home2.png
+    │   ├── sukses.png
+    │   ├── tambah1.png
+    │   └── tambah2.png
+    ├── module/
+    │   └── artikel/
+    │       ├── index.php
+    │       ├── tambah.php
+    │       └── ubah.php
+    ├── home/
+    ├── template/
+    │   ├── footer.php
+    │   ├── header.php
+    │   └── sidebar.php
+    ├── .htaccess
+    ├── config.php
+    ├── index.php
+    └── README.md
 
-include "template/footer.php";
-?>
-```
 
-### 3. URL Rewriting (`.htaccess`)
-```
-<IfModule mod_rewrite.c> 
-    RewriteEngine On
-    # Sesuaikan RewriteBase dengan nama folder project kamu di htdocs 
-    RewriteBase /lab11_php_oop/ 
+## Fitur
 
-    # Jangan proses jika file/folder aslinya memang ada 
-    RewriteCond %{REQUEST_FILENAME} !-d 
-    RewriteCond %{REQUEST_FILENAME} !-f 
-    
-    # Arahkan semua request lain ke index.php 
-    RewriteRule ^(.*)$ index.php/$1 [L] 
-</IfModule> 
-```
+- Routing URL menggunakan `.htaccess`
+- Struktur modular (module/home, module/artikel)
+- Class OOP (Form & Database)
+- CRUD Artikel (Create–Read–Update)
+- Template header/footer
 
-### 4. Buat Modul
-#### A. Home Page (`module/artikel/index.php`)
-```
-<?php
-$db = new Database();
-$data = $db->query("SELECT * FROM artikel");
-?>
+  
+## Teknologi
 
-<h2>Daftar Artikel</h2>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Judul</th>
-        <th>Isi</th>
-    </tr>
-    <?php while ($row = $data->fetch_assoc()): ?>
-    <tr>
-        <td><?= $row['id'] ?></td>
-        <td><?= $row['judul'] ?></td>
-        <td><?= $row['isi'] ?></td>
-    </tr>
-    <?php endwhile; ?>
-</table>
-```
+- PHP OOP
+- MySQL
+- Apache mod_rewrite
+- HTML
 
-#### B. Tambah Artikel (`module/artikel/tambah.php`)
-```
-<?php
-$db = new Database();
-$form = new Form("", "Simpan Artikel");
+## Screenshot
+Tampilan database setup 
+<img width=# Praktikum 11 – Modularisasi dengan PHP OOP & Routing
 
-if ($_POST) {
-    $data = [
-        'judul' => $_POST['judul'],
-        'isi' => $_POST['isi']
-    ];
-    $simpan = $db->insert('artikel', $data);
-    if ($simpan) {
-        echo "<div style='color:green'>Artikel berhasil disimpan!</div>";
-    } else {
-        echo "<div style='color:red'>Gagal menyimpan artikel.</div>";
-    }
-}
-?>
+## Nama : Cindy Revalina Simanullang
 
-<h2>Tambah Artikel</h2>
-<?php
-$form->addField("judul", "Judul Artikel");
-$form->addField("isi", "Isi Artikel", "textarea");
-$form->displayForm();
-?>
-```
+## NIM  : 312410417
 
-### 5. Database Setup
-```
-CREATE DATABASE lathian_oop;
-USE lathian_oop;
-CREATE TABLE artikel (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    judul VARCHAR(255),
-    isi TEXT
-);
-```
-<img src="">
+Repository ini berisi hasil praktikum 11 mata kuliah Pemrograman Web Universitas Pelita Bangsa.
 
-### 6. Hasil
-#### A. `index.php`
-Before
+## TUJUAN ARTIKEL: "Pengenalan PHP dan Perannya dalam Pengembangan Web Modern"
 
-<img src="HOME 1.png" widthvvvv="450">
+    1. Memberikan pemahaman tentang apa itu PHP.
+       - PHP adalah bahasa pemrograman server-side untuk membuat website dinamis.
 
-After
+    2. Menjelaskan alasan mengapa PHP banyak digunakan.
+       - Mudah dipelajari, fleksibel, dan cocok untuk pemula maupun profesional.
+       - Terintegrasi baik dengan database seperti MySQL.
 
-<img src="HOME 2.png" width="450">
+    3. Menunjukkan peran PHP dalam pengembangan aplikasi web.
+       - Mengolah data, menerima input, mengelola sesi, dan berkomunikasi dengan database.
 
-#### B. Tambah Artikel (`tambah.php`)
-1.
-<img src="TAMBAH 1.png" width="450">
+    4. Memberikan gambaran perkembangan PHP di era modern.
+       - Tersedia banyak framework seperti Laravel, CI, dan Symfony.
+       - Membantu developer membuat aplikasi yang lebih aman dan terstruktur.
 
-2.
-<img src="TAMBAH 2.png" width="450">
+    5. Menjelaskan manfaat mempelajari PHP bagi mahasiswa atau developer.
+       - Dapat membuat sistem CRUD, login, dashboard, dan aplikasi besar lainnya.
+       - PHP tetap relevan dan digunakan luas di dunia industri.
 
-3.
-<img src="SUKSES.png" width="450">
+## Struktur Projec
 
-## TESTING
-http://localhost/lab11_php_oop/artikel/tambah
+    lab11_php_oop/
+    ├── database.php
+    ├── form.php
+    ├── gambar/
+    │   ├── home1.png
+    │   ├── home2.png
+    │   ├── sukses.png
+    │   ├── tambah1.png
+    │   └── tambah2.png
+    ├── module/
+    │   └── artikel/
+    │       ├── index.php
+    │       ├── tambah.php
+    │       └── ubah.php
+    ├── home/
+    ├── template/
+    │   ├── footer.php
+    │   ├── header.php
+    │   └── sidebar.php
+    ├── .htaccess
+    ├── config.php
+    ├── index.php
+    └── README.md
 
-## Author
-Nama: Nurul fadilah
 
-NIM: 312410689
+## Fitur
 
-Kelas: TI.24.A.3
+- Routing URL menggunakan `.htaccess`
+- Struktur modular (module/home, module/artikel)
+- Class OOP (Form & Database)
+- CRUD Artikel (Create–Read–Update)
+- Template header/footer
+
+  
+## Teknologi
+
+- PHP OOP
+- MySQL
+- Apache mod_rewrite
+- HTML
+
+## Screenshot
+Tampilan database setup 
+<img width="# Praktikum 11 – Modularisasi dengan PHP OOP & Routing
+
+## Nama : Cindy Revalina Simanullang
+
+## NIM  : 312410417
+
+Repository ini berisi hasil praktikum 11 mata kuliah Pemrograman Web Universitas Pelita Bangsa.
+
+## TUJUAN ARTIKEL: "Pengenalan PHP dan Perannya dalam Pengembangan Web Modern"
+
+    1. Memberikan pemahaman tentang apa itu PHP.
+       - PHP adalah bahasa pemrograman server-side untuk membuat website dinamis.
+
+    2. Menjelaskan alasan mengapa PHP banyak digunakan.
+       - Mudah dipelajari, fleksibel, dan cocok untuk pemula maupun profesional.
+       - Terintegrasi baik dengan database seperti MySQL.
+
+    3. Menunjukkan peran PHP dalam pengembangan aplikasi web.
+       - Mengolah data, menerima input, mengelola sesi, dan berkomunikasi dengan database.
+
+    4. Memberikan gambaran perkembangan PHP di era modern.
+       - Tersedia banyak framework seperti Laravel, CI, dan Symfony.
+       - Membantu developer membuat aplikasi yang lebih aman dan terstruktur.
+
+    5. Menjelaskan manfaat mempelajari PHP bagi mahasiswa atau developer.
+       - Dapat membuat sistem CRUD, login, dashboard, dan aplikasi besar lainnya.
+       - PHP tetap relevan dan digunakan luas di dunia industri.
+
+## Struktur Projec
+
+    lab11_php_oop/
+    ├── database.php
+    ├── form.php
+    ├── gambar/
+    │   ├── home1.png
+    │   ├── home2.png
+    │   ├── sukses.png
+    │   ├── tambah1.png
+    │   └── tambah2.png
+    ├── module/
+    │   └── artikel/
+    │       ├── index.php
+    │       ├── tambah.php
+    │       └── ubah.php
+    ├── home/
+    ├── template/
+    │   ├── footer.php
+    │   ├── header.php
+    │   └── sidebar.php
+    ├── .htaccess
+    ├── config.php
+    ├── index.php
+    └── README.md
+
+
+## Fitur
+
+- Routing URL menggunakan `.htaccess`
+- Struktur modular (module/home, module/artikel)
+- Class OOP (Form & Database)
+- CRUD Artikel (Create–Read–Update)
+- Template header/footer
+
+  
+## Teknologi
+
+- PHP OOP
+- MySQL
+- Apache mod_rewrite
+- HTML
+
+## Screenshot
+Tampilan database setup 
+<img width="175" height="95" alt="image" src="https://github.com/user-attachments/assets/16e1f7bf-354e-46ee-8c6c-e4236bbc9723" />
+
+Tampilan home1
+<img width="837" height="369" alt="image" src="https://github.com/user-attachments/assets/dab43842-f18b-46fc-ac50-a9f0320d7173" />
+
+Tampilan home2
+<img width="1365" height="535" alt="image" src="https://github.com/user-attachments/assets/a556ac8c-2333-4330-b94f-d703b87ae508" />
+
+Tampilan home1
+<img width="848" height="502" alt="image" src="https://github.com/user-attachments/assets/7ede8b8c-086d-43c7-ba04-2591f2cd67a0" />
+
+Tampilan tambah2
+<img width="584" height="368" alt="image" src="https://github.com/user-attachments/assets/ac82a78d-fd89-4152-92b2-666afde52d9c" />
+
+## Kesimpulan
+    Artikel ini bertujuan memberikan gambaran umum tentang PHP,
+    mengapa PHP penting, serta bagaimana PHP digunakan dalam pengembangan web.
+
+## 🧑‍💻 Cara menjalankan
+1. Clone repo ke htdocs XAMPP
+2. Buat database `oop_latihan`
+3. Import tabel `artikel`
+4. Akses: http://localhost/lab11_php_oop/
+# Praktikum 11 – Modularisasi dengan PHP OOP & Routing
+
+## Nama : Cindy Revalina Simanullang
+
+## NIM  : 312410417
+
+Repository ini berisi hasil praktikum 11 mata kuliah Pemrograman Web Universitas Pelita Bangsa.
+
+## TUJUAN ARTIKEL: "Pengenalan PHP dan Perannya dalam Pengembangan Web Modern"
+
+    1. Memberikan pemahaman tentang apa itu PHP.
+       - PHP adalah bahasa pemrograman server-side untuk membuat website dinamis.
+
+    2. Menjelaskan alasan mengapa PHP banyak digunakan.
+       - Mudah dipelajari, fleksibel, dan cocok untuk pemula maupun profesional.
+       - Terintegrasi baik dengan database seperti MySQL.
+
+    3. Menunjukkan peran PHP dalam pengembangan aplikasi web.
+       - Mengolah data, menerima input, mengelola sesi, dan berkomunikasi dengan database.
+
+    4. Memberikan gambaran perkembangan PHP di era modern.
+       - Tersedia banyak framework seperti Laravel, CI, dan Symfony.
+       - Membantu developer membuat aplikasi yang lebih aman dan terstruktur.
+
+    5. Menjelaskan manfaat mempelajari PHP bagi mahasiswa atau developer.
+       - Dapat membuat sistem CRUD, login, dashboard, dan aplikasi besar lainnya.
+       - PHP tetap relevan dan digunakan luas di dunia industri.
+
+## Struktur Projec
+
+    lab11_php_oop/
+    ├── database.php
+    ├── form.php
+    ├── gambar/
+    │   ├── home1.png
+    │   ├── home2.png
+    │   ├── sukses.png
+    │   ├── tambah1.png
+    │   └── tambah2.png
+    ├── module/
+    │   └── artikel/
+    │       ├── index.php
+    │       ├── tambah.php
+    │       └── ubah.php
+    ├── home/
+    ├── template/
+    │   ├── footer.php
+    │   ├── header.php
+    │   └── sidebar.php
+    ├── .htaccess
+    ├── config.php
+    ├── index.php
+    └── README.md
+
+
+## Fitur
+
+- Routing URL menggunakan `.htaccess`
+- Struktur modular (module/home, module/artikel)
+- Class OOP (Form & Database)
+- CRUD Artikel (Create–Read–Update)
+- Template header/footer
+
+  
+## Teknologi
+
+- PHP OOP
+- MySQL
+- Apache mod_rewrite
+- HTML
+
+## Screenshot
+Tampilan database setup 
+<img width="" />
+
+Tampilan home1
+<img width="837" height="369" alt="image" src="https://github.com/user-attachments/assets/dab43842-f18b-46fc-ac50-a9f0320d7173" />
+
+Tampilan home2
+<img width="1365" height="535" alt="image" src="https://github.com/user-attachments/assets/a556ac8c-2333-4330-b94f-d703b87ae508" />
+
+Tampilan home1
+<img width="848" height="502" alt="image" src="https://github.com/user-attachments/assets/7ede8b8c-086d-43c7-ba04-2591f2cd67a0" />
+
+Tampilan tambah2
+<img width="584" height="368" alt="image" src="https://github.com/user-attachments/assets/ac82a78d-fd89-4152-92b2-666afde52d9c" />
+
+## Kesimpulan
+    Artikel ini bertujuan memberikan gambaran umum tentang PHP,
+    mengapa PHP penting, serta bagaimana PHP digunakan dalam pengembangan web.
+
+## 🧑‍💻 Cara menjalankan
+1. Clone repo ke htdocs XAMPP
+2. Buat database `oop_latihan`
+3. Import tabel `artikel`
+4. Akses: http://localhost/lab11_php_oop/
+
+
+Tampilan home1
+<img width="837" height="369" alt="image" src="https://github.com/user-attachments/assets/dab43842-f18b-46fc-ac50-a9f0320d7173" />
+
+Tampilan home2
+<img width="1365" height="535" alt="image" src="https://github.com/user-attachments/assets/a556ac8c-2333-4330-b94f-d703b87ae508" />
+
+Tampilan home1
+<img width="848" height="502" alt="image" src="https://github.com/user-attachments/assets/7ede8b8c-086d-43c7-ba04-2591f2cd67a0" />
+
+Tampilan tambah2
+<img width="584" height="368" alt="image" src="https://github.com/user-attachments/assets/ac82a78d-fd89-4152-92b2-666afde52d9c" />
+
+## Kesimpulan
+    Artikel ini bertujuan memberikan gambaran umum tentang PHP,
+    mengapa PHP penting, serta bagaimana PHP digunakan dalam pengembangan web.
+
+## 🧑‍💻 Cara menjalankan
+1. Clone repo ke htdocs XAMPP
+2. Buat database `oop_latihan`
+3. Import tabel `artikel`
+4. Akses: http://localhost/lab11_php_oop/
+
+
+Tampilan home1
+<img width="837" height="369" alt="image" src="https://github.com/user-attachments/assets/dab43842-f18b-46fc-ac50-a9f0320d7173" />
+
+Tampilan home2
+<img width="1365" height="535" alt="image" src="https://github.com/user-attachments/assets/a556ac8c-2333-4330-b94f-d703b87ae508" />
+
+Tampilan home1
+<img width="848" height="502" alt="image" src="https://github.com/user-attachments/assets/7ede8b8c-086d-43c7-ba04-2591f2cd67a0" />
+
+Tampilan tambah2
+<img width="584" height="368" alt="image" src="https://github.com/user-attachments/assets/ac82a78d-fd89-4152-92b2-666afde52d9c" />
+
+## Kesimpulan
+    Artikel ini bertujuan memberikan gambaran umum tentang PHP,
+    mengapa PHP penting, serta bagaimana PHP digunakan dalam pengembangan web.
+
+## 🧑‍💻 Cara menjalankan
+1. Clone repo ke htdocs XAMPP
+2. Buat database `oop_latihan`
+3. Import tabel `artikel`
+4. Akses: http://localhost/lab11_php_oop/
