@@ -145,13 +145,13 @@ CREATE TABLE artikel (
     isi TEXT
 );
 ```
-<img src="DATABASE SETUP.png" width="450">
+<img src="">
 
 ### 6. Hasil
 #### A. `index.php`
 Before
 
-<img src="HOME 1.png" width="450">
+<img src="HOME 1.png" widthvvvv="450">
 
 After
 
