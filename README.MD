@@ -70,17 +70,23 @@ Repository ini berisi hasil praktikum 11 mata kuliah Pemrograman Web Universitas
 - HTML
 
 ## Screenshot
-Tampilan database setup 
+
+- Tampilan database setup: 
+
 <img src="GAMBAR/DATABASE SETUP.png" width="450">
 
-Tampilan home1
+- Tampilan home1:
+
 <img src="GAMBAR/HOME 1.png" width="450">
 
-Tampilan home2
+- Tampilan home2:
+
 <img src="GAMBAR/HOME 2.png" width="450">
 
-Tampilan tamabah1
+- Tampilan tambah1:
+
 <img src="GAMBAR/TAMBAH 1.png" width="450">
 
-Tampilan tambah2
+- Tampilan tambah2:
+
 <img src="GAMBAR/TAMBAH 2.png" width="450">
