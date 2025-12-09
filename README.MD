@@ -90,3 +90,7 @@ Repository ini berisi hasil praktikum 11 mata kuliah Pemrograman Web Universitas
 - Tampilan tambah2:
 
 <img src="GAMBAR/TAMBAH 2.png" width="450">
+
+- Tampilan sukses
+
+<img src="GAMBAR/SUKSES.png" width="450">
